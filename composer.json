@@ -1,6 +1,6 @@
 {
     "name": "amiraghaee/redirector",
-    "description": "a packgae redirect routes",
+    "description": "with using this package, you can manage the header status code of routes. you can redirect or abort routes with status code.",
     "license": "MIT",
     "authors": [
         {
