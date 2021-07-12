@@ -17,7 +17,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Supported Engines: "redis", "eloquent"
-    | TODO: create eloquent Engine!
+    | Strongly we recommend Redis database! Eloquent may adversely affect your speed
+    |
     */
     'engine' => 'redis',
 
@@ -25,6 +26,8 @@ return [
     |--------------------------------------------------------------------------
     | Header Status
     |--------------------------------------------------------------------------
+    | If you want another status, you can add the header status to the following array.
+    |
     */
     'status' => [
         'redirect' => [

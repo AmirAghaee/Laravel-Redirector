@@ -4,6 +4,7 @@
 namespace AmirAghaee\Redirector\DataEngines;
 
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
 
 class RedisEngine implements DataEngine
@@ -11,36 +12,40 @@ class RedisEngine implements DataEngine
 
     public function delete(string $key): bool
     {
-        Redis::delete('redirector:' . $key);
+        Redis::del('redirector:' . $key);
         return true;
     }
 
-    public function all(): array
+    public function get(string $route): array
     {
-        $keys = Redis::keys('redirector:*');
-        $export = [];
-        foreach ($keys as $key) {
-            $key = preg_replace('/.*:/', '', $key);
-            $export[$key] = $this->get($key);
-        }
-        return $export;
+        return [
+            'source' => $route,
+            'endpoint' => Redis::hgetall('redirector:' . $route)['endpoint'],
+            'status' => Redis::hgetall('redirector:' . $route)['status']
+        ];
     }
 
     public function set(string $route, $status, $value = null): bool
     {
-        Redis::hmset('redirector:' . $this->clearUrlRoute($route), ['route' => $value, 'status' => $status]);
+        Redis::hmset('redirector:' . $this->clearUrlRoute($route), ['endpoint' => $value, 'status' => $status]);
         return true;
     }
 
     public function exists(string $key): bool
     {
         $allRoutes = $this->all();
-        return array_key_exists($key, $allRoutes);
+        return $allRoutes->contains('source', $key);
     }
 
-    public function get(string $route)
+    public function all(): Collection
     {
-        return Redis::hgetall('redirector:' . $route);
+        $keys = Redis::keys('redirector:*');
+        $export = collect([]);
+        foreach ($keys as $key) {
+            $key = preg_replace('/.*:/', '', $key);
+            $export->push($this->get($key));
+        }
+        return $export;
     }
 
     public function fresh(): bool
