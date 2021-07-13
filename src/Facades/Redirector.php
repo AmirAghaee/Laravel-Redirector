@@ -3,14 +3,15 @@
 namespace AmirAghaee\Redirector\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Collection;
 
 /**
  * Class Redirector
  *
  * @method static get(string $route)
- * @method static set(string $route, int $status, $endpoint = null): bool
- * @method static all(): Collection
- * @method static delete(string $route): bool
+ * @method static bool set(string $route, int $status, $endpoint = null)
+ * @method static Collection all()
+ * @method static bool  delete(string $route)
  *
  */
 class Redirector extends Facade

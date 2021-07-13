@@ -27,7 +27,7 @@ class RedisEngine implements DataEngine
 
     public function set(string $route, $status, $value = null): bool
     {
-        Redis::hmset('redirector:' . $this->clearUrlRoute($route), ['endpoint' => $value, 'status' => $status]);
+        Redis::hmset('redirector:' . $this->clearUrlRoute($route), ['endpoint' => $this->clearUrlRoute($value), 'status' => $status]);
         return true;
     }
 
